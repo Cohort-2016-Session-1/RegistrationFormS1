@@ -35,15 +35,26 @@ function validateForm(e) {
 
         //First name matches the expression
         //and is valid
-        alert("Valid first name");
-
+        //alert("Valid first name");
+        removeErrorMessage('firstName');
     }
     else {
-        alert("Invalid first name");
+        //alert("Invalid first name");
+        addErrorMessage('firstName',
+            'Invalid/missing first name');
         error = true;
     }
 
-    
+    if (error) {
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        else {
+            e.returnValue = false;
+        }
+    }
+
+    return false;
 } // End of validateForm() function.
 
 // Function called when the terms checkbox changes.

@@ -32,7 +32,19 @@ function addErrorMessage(id, msg) {
 		elem.parentNode.appendChild(span);
 		//and to the LEFT of the input box,
 		//update the label:
-		elem.previousSibling.className = "error";
+
+		//alert(elem.parentNode.childNodes[1].innerHTML);
+		//alert(elem.previousSibling.innerHTML);
+
+		//elem.previousSibling.className = 'error';
+		//elem.parentNode.childNodes[1].className = 'error';
+		var nodes = elem.parentNode.childNodes;
+		for (var i = 0; i < nodes.length; i++)
+		{
+			if(nodes[i].innerHTML != "" && nodes[i].id == "") {
+				nodes[i].className = 'error';
+			}
+		}
 	}
 } // End of addErrorMessage() function.
 
@@ -48,8 +60,15 @@ function removeErrorMessage(id) {
 	if (span) {
 		//Remove red text from the label,
 		//aka the sibling of the sibling (input):
-		span.previousSibling.previousSibling
-			.className = null;
+		//span.previousSibling.previousSibling.className = null;
+		//span.parentNode.childNodes[1].className = null;
+		var nodes = span.parentNode.childNodes;
+		for (var i = 0; i < nodes.length; i++)
+		{
+			if(nodes[i].innerHTML != "" && nodes[i].id == "") {
+				nodes[i].className = null;
+			}
+		}
 
 		//Remove the span completely
 		span.parentNode.removeChild(span);

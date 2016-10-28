@@ -65,20 +65,19 @@ function validateForm(e) {
 
     //Get form references:
     var firstName = U.$('firstName');
-    var lastName;
+    var lastName = U.$('lastName');
     var userName = U.$('userName');
-    var email;
-    var phone;
-    var city;
-    var state;
-    var zip;
-    var terms; //We'll populate these later
+    var email = U.$('email');
+    var phone = U.$('phone');
+    var city = U.$('city');
+    var state = U.$('state');
+    var zip = U.$('zip')
+    var terms = U.$('terms');
 
     //error flag:
     var error = false;
 
-    //Validate the first name using a
-    //regular expression:
+    //Validate the first name using a regular expression:
     if (/^[A-Z \.\-']{2,20}$/i.test(firstName.value)) {
         // Everything between / and / is the expression
         //Any letter A-Z (case insensitive) is valid
@@ -97,6 +96,9 @@ function validateForm(e) {
         error = true;
     }
 
+    //Validate the last name using a regular expression:
+
+    //Validate the username using a validation function:
     if(validateUsername(userName.value)) {
         //The username meets requirements
         removeErrorMessage('userName');
@@ -107,6 +109,11 @@ function validateForm(e) {
             'username does not meet criteria');
         error = true;
     }
+
+    //Validate the email using a regular expression:
+    //Validate the phone using a regular expression:
+    //Validate the city using a regular expression:
+    //Validate the zip using a regular expression:
 
     if (error) {
         if (e.preventDefault) {

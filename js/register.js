@@ -4,6 +4,57 @@
 // Function called when the form is submitted.
 // Function validates the form data.
 
+function validateUsername(username) {
+    //Validates that a username meets
+    //the following criteria:
+    //1. Must be at least 8 characters long
+    //2. First character must be A-Z or a-z
+    //3. Must contain at least one digit (0-9)
+    //Function returns "true" if all criteria
+    //is met, "false" if any criteria not met.
+
+    var char1;
+    var hasNumber;
+
+    //Check username length:
+    if (username.length < 8) {
+        return false;
+    }
+
+    //Check first character:
+    char1 = username.substr(0, 1).toUpperCase();
+    if (!(char1 >= "A" && char1 <= "Z")) {
+        return false;
+    }
+
+    //Check for at least one digit/numeral:
+    /*hasNumber = /\d/;
+    if (!(hasNumber.test(username))) {
+        return false;
+    }*/
+
+    //Alternate version
+    var anyDigits = false;
+    while (!(anyDigits)) {
+        for (var i = 1; i < username.length; i++)
+        {
+            char1 = username.substr(i, 1);
+            if (char1 >= "0" && char1 <= "9")
+            {
+                anyDigits = true;
+                break; //exit for loop, found one!
+            }//end if
+        }//end for
+
+        if (!(anyDigits)) {
+            return false;
+        }
+    }//end while
+
+    //Otherwise, all criteria met:
+    return true;
+} //end function
+
 function validateForm(e) {
     'use strict';
 
@@ -15,6 +66,7 @@ function validateForm(e) {
     //Get form references:
     var firstName = U.$('firstName');
     var lastName;
+    var userName = U.$('userName');
     var email;
     var phone;
     var city;
@@ -42,6 +94,17 @@ function validateForm(e) {
         //alert("Invalid first name");
         addErrorMessage('firstName',
             'Invalid/missing first name');
+        error = true;
+    }
+
+    if(validateUsername(userName.value)) {
+        //The username meets requirements
+        removeErrorMessage('userName');
+    }
+    else {
+        //The username is not valid
+        addErrorMessage('userName',
+            'username does not meet criteria');
         error = true;
     }
 

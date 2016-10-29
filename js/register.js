@@ -4,7 +4,7 @@
 // Function called when the form is submitted.
 // Function validates the form data.
 
-function validateUsername(username) {
+function validateUsername(username, message) {
     //Validates that a username meets
     //the following criteria:
     //1. Must be at least 8 characters long
@@ -18,23 +18,30 @@ function validateUsername(username) {
 
     //Check username length:
     if (username.length < 8) {
+        message.valueOf =
+            "User name must be at least 8 characters";
         return false;
     }
 
     //Check first character:
     char1 = username.substr(0, 1).toUpperCase();
     if (!(char1 >= "A" && char1 <= "Z")) {
+        message.valueOf =
+            "First character must be A-Z or a-z";
         return false;
     }
 
     //Check for at least one digit/numeral:
-    /*hasNumber = /\d/;
+    hasNumber = /\d/;
     if (!(hasNumber.test(username))) {
+        message.valueOf =
+            "User name must contain " +
+            "at least one numeral";
         return false;
-    }*/
+    }
 
     //Alternate version
-    var anyDigits = false;
+    /*var anyDigits = false;
     while (!(anyDigits)) {
         for (var i = 1; i < username.length; i++)
         {
@@ -49,7 +56,7 @@ function validateUsername(username) {
         if (!(anyDigits)) {
             return false;
         }
-    }//end while
+    }//end while*/
 
     //Otherwise, all criteria met:
     return true;
@@ -71,7 +78,7 @@ function validateForm(e) {
     var phone = U.$('phone');
     var city = U.$('city');
     var state = U.$('state');
-    var zip = U.$('zip')
+    var zip = U.$('zip');
     var terms = U.$('terms');
 
     //error flag:
@@ -99,14 +106,15 @@ function validateForm(e) {
     //Validate the last name using a regular expression:
 
     //Validate the username using a validation function:
-    if(validateUsername(userName.value)) {
+    var msg = "initial message";
+    msg = Object(msg);
+    if(validateUsername(userName.value, msg)) {
         //The username meets requirements
         removeErrorMessage('userName');
     }
     else {
         //The username is not valid
-        addErrorMessage('userName',
-            'username does not meet criteria');
+        addErrorMessage('userName', msg.valueOf);
         error = true;
     }
 

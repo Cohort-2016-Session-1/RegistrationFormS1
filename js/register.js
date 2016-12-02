@@ -3,52 +3,62 @@
 
 // Function called when the form is submitted.
 // Function validates the form data.
-function validateUsername(username) {
-   // Declare variables and constants
-   var char1;                     // one character extracted from username
-   var anyDigits = false;     // variable to signify presence of digits
-   var index  ;                    // loop variable for extracting characters
+function validateUsername(username, message) {
+	//Validates that a username meets
+	//the following criteria:
+	//1. Must be at least 8 characters long
+	//2. First character must be A-Z or a-z
+	//3. Must contain at least one digit (0-9)
+	//Function returns "true" if all criteria
+	//is met, "false" if any criteria not met.
 
-   // Check for length of username
-   if (username.length < 8) {
-      alert("ERROR...your username must be at least 8 characters long.");
-      username = prompt("Please enter your new username:",ES);
-   }
+	var char1;
+	var hasNumber;
 
-   // Check that first character is a letter
-   // Substring function has two arguments: starting position and number of characters
-   // Character comparison can determine whether a character is a letter
-   char1 = username.substr(0, 1);
-   if (!((char1 >= "a" && char1 <= "z") || (char1 >= "A" && char1 <="Z"))) {
-      alert("ERROR...the first character of your username must be a letter.");
-      username = prompt("Please enter your new username:",ES);
-      char1 = username.substr(0, 1);
-   }
+	//Check username length:
+	if (username.length < 8) {
+		message.valueOf =
+			"User name must be at least 8 characters";
+		return false;
+	}
 
-   // Check that there's at least one digit in the username
-   // Substring function has two arguments: starting position and number of characters
-   // Character comparison can determine whether a character is a digit
+	//Check first character:
+	char1 = username.substr(0, 1).toUpperCase();
+	if (!(char1 >= "A" && char1 <= "Z")) {
+		message.valueOf =
+			"First character must be A-Z or a-z";
+		return false;
+	}
 
-	//Alternative:
-	//var hasNumber = /\d/;
-	//hasNumber.test(username);
-  
-   while (!(anyDigits)) {
-      // Check each character, set anyDigits to true if a digit
-      for (index = 1; index < username.length; index++) {
-         char1 = username.substr(index, 1);
-         if (char1 >= "0" && char1 <= "9") {
-            anyDigits = true;
-         }
-      }
+	//Check for at least one digit/numeral:
+	hasNumber = /\d/;
+	if (!(hasNumber.test(username))) {
+		message.valueOf =
+			"User name must contain " +
+			"at least one numeral";
+		return false;
+	}
 
-      // If anyDigits is still false, no digits were present
-      if (!(anyDigits)) {
-         alert("ERROR...your username must include at least 1 digit.");
-      username = prompt("Please enter your new username:",ES);
-      }
-   }
-}
+	//Alternate version
+	/*var anyDigits = false;
+	 while (!(anyDigits)) {
+	 for (var i = 1; i < username.length; i++)
+	 {
+	 char1 = username.substr(i, 1);
+	 if (char1 >= "0" && char1 <= "9")
+	 {
+	 anyDigits = true;
+	 break; //exit for loop, found one!
+	 }//end if
+	 }//end for
+	 if (!(anyDigits)) {
+	 return false;
+	 }
+	 }//end while*/
+
+	//Otherwise, all criteria met:
+	return true;
+} //end function
 
 function validateForm(e) {
     'use strict';
@@ -59,6 +69,7 @@ function validateForm(e) {
     // Get form references:
 	var firstName = U.$('firstName');
 	var lastName = U.$('lastName');
+	var userName = U.$('userName');
 	var email = U.$('email');
 	var phone = U.$('phone');
 	var city = U.$('city');
@@ -80,7 +91,15 @@ function validateForm(e) {
 		addErrorMessage('firstName', 'Please enter your first name.');
 		error = true;
 	}
-	
+
+	// Validate the last name:
+	if (/^[A-Z \.\-']{2,20}$/i.test(lastName.value)) {
+		removeErrorMessage('lastName');
+	} else {
+		addErrorMessage('lastName', 'Please enter your last name.');
+		error = true;
+	}
+
 	// Validate the email address:
 	if (/^[\w.-]+@[\w.-]+\.[A-Za-z]{2,6}$/.test(email.value)) {
 		removeErrorMessage('email');
@@ -89,8 +108,18 @@ function validateForm(e) {
 		error = true;
 	}
 	
-	//Validate the user name:
-	validateUsername(userName.value);
+	//Validate the username using a validation function:
+	var msg = "initial message";
+	msg = Object(msg);
+	if(validateUsername(userName.value, msg)) {
+		//The username meets requirements
+		removeErrorMessage('userName');
+	}
+	else {
+		//The username is not valid
+		addErrorMessage('userName', msg.valueOf);
+		error = true;
+	}
 	
 	// Validate the phone number:
 	if (/\d{3}[ \-\.]?\d{3}[ \-\.]?\d{4}/.test(phone.value)) {
@@ -99,9 +128,16 @@ function validateForm(e) {
 		addErrorMessage('phone', 'Please enter your phone number.');
 		error = true;
 	}
-	
+
+	// Validate the city:
+	if (/^[A-Z \.\-']{2,20}$/i.test(city.value)) {
+		removeErrorMessage('city');
+	} else {
+		addErrorMessage('city', 'Please enter your city.');
+		error = true;
+	}
+
 	// Validate the state:
-	alert(state.selectedIndex);
 	if (state.selectedIndex != 0) {
 		removeErrorMessage('state');
 	} else {
